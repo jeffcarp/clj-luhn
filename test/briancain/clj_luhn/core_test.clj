@@ -4,10 +4,10 @@
 
 (deftest valid?-test
   (testing "if a credit card number is valid"
-    (= true (valid? 49927398716)))
+    (is (valid? 49927398716)))
   (testing "if a credit card number is not valid"
-    (= false (valid? 79927398710))))
+    (is (not (valid? 79927398710)))))
 
 (deftest check-digit-test
   (testing "obtains the check digit from a card"
-    (= 3 (check-digit 79927398710))))
+    (is (= 3 (check-digit 79927398710)))))
