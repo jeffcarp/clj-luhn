@@ -3,7 +3,7 @@
 (defn- expand-to-digits
   "Takes a number like 12345 and returns a vector [1 2 3 4 5]"
   [number]
-  (vec (map #(Character/digit % 10)  (str number))))
+  (vec (map #(Character/digit % 10) (str number))))
 
 (defn- double-or-sum
   "Returns double of product unless number > 9 (in which it returns the num of the two digits in its product)"
@@ -17,7 +17,7 @@
   "Doubles every other number in the card sequence"
   [ccn]
   (map-indexed
-    #(if (zero? (mod (inc %1 ) 2))
+    #(if (zero? (mod (inc %1) 2))
        (double-or-sum %2)
        %2)
     ccn))
@@ -38,11 +38,17 @@
   [ccn]
   (let [expanded-ccn (expand-to-digits ccn)
         ccn-seq (double-every-other expanded-ccn)
-        ccn-sum (reduce + ccn-seq) ]
+        ccn-sum (reduce + ccn-seq)]
     (mod (* ccn-sum 9) 10)))
 
-(defn valid?
+(defn old-valid?
   "Checks if the passed in ccn is valid"
   [ccn]
   (= (validate-number ccn) 0))
 
+(defn valid? [cc]
+  (let [factors (flatten (repeat [1 2]))
+        numbers (map #(Character/digit % 10) (seq (str cc)))
+        sum (reduce + (map #(int (+ (/ %1 10) (mod %1 10)))
+                        (map * (reverse numbers) factors)))]
+    (zero? (mod sum 10))))
